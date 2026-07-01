@@ -637,9 +637,16 @@ h3 {
 }
 
 .secondary-button {
-  color: rgba(17, 17, 20, 0.52);
-  background: rgba(255, 255, 255, 0.62);
-  border: 1px solid rgba(17, 17, 20, 0.12);
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.76);
+  border: 1px solid rgba(17, 17, 20, 0.16);
+}
+
+.secondary-button:hover,
+.secondary-button:focus-visible {
+  color: var(--white);
+  background: var(--teal);
+  border-color: var(--teal);
 }
 
 .site-footer {
