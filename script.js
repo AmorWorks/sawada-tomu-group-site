@@ -1,7 +1,6 @@
 const body = document.body;
 const header = document.querySelector("[data-header]");
 const intro = document.querySelector("[data-intro]");
-const introVideo = document.querySelector(".intro-video");
 const menuToggle = document.querySelector("[data-menu-toggle]");
 const nav = document.querySelector("[data-nav]");
 const year = document.querySelector("[data-year]");
@@ -28,8 +27,6 @@ function updateIntro() {
   const isDesktop = window.innerWidth > 900;
   const isMobile = window.innerWidth <= 560;
   const logoOpacity = clamp(progress * 1.35, 0, 1);
-  const videoOpacity = 0.22 + progress * 0.18;
-  const videoScale = 1.06 - progress * 0.035;
   const logoX = isDesktop ? -window.innerWidth * 0.18 * layoutProgress : 0;
   const logoLift = isMobile ? -86 * layoutProgress : 0;
   const logoTranslate = (1 - progress) * 46 + logoLift;
@@ -40,8 +37,6 @@ function updateIntro() {
   const overlayOpacity = 0.15 + progress * 0.55;
 
   document.documentElement.style.setProperty("--intro-progress", progress.toFixed(3));
-  document.documentElement.style.setProperty("--intro-video-opacity", videoOpacity.toFixed(3));
-  document.documentElement.style.setProperty("--intro-video-scale", videoScale.toFixed(3));
   document.documentElement.style.setProperty("--intro-logo-opacity", logoOpacity.toFixed(3));
   document.documentElement.style.setProperty("--intro-logo-x", `${logoX.toFixed(1)}px`);
   document.documentElement.style.setProperty("--intro-logo-translate", `${logoTranslate.toFixed(1)}px`);
@@ -87,10 +82,6 @@ window.addEventListener("resize", scheduleIntroUpdate);
 
 if (year) {
   year.textContent = new Date().getFullYear();
-}
-
-if (introVideo && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-  introVideo.play?.().catch(() => {});
 }
 
 updateIntro();
