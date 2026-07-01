@@ -8,10 +8,12 @@ SAWADA TOMU GROUP ホームページ初稿です。
 - `styles.css`: デザイン
 - `script.js`: スクロール演出、モバイルメニュー、年表示
 - `assets/`: ロゴ画像
+- `assets/hero-video.mp4`: ヒーロー背景動画
 
 ## 現時点の確定情報
 
 - ロゴ画像2点
+- ヒーロー背景動画: `assets/hero-video.mp4`（自動再生、ループなし）
 - Instagramリンク: https://www.instagram.com/sawadatomugroup?igsh=aG04ZGp1NHludTBl
 - 演出方針: 黒から始まり、スクロールで1枚目のロゴを表示。最後は2枚目の温かいロゴで問い合わせへつなげる。
 
