@@ -14,9 +14,11 @@
   --intro-progress: 0;
   --intro-overlay-opacity: 0.15;
   --intro-logo-opacity: 0;
+  --intro-logo-x: 0px;
   --intro-logo-translate: 46px;
   --intro-logo-scale: 0.82;
   --intro-copy-opacity: 0;
+  --intro-copy-x: 0px;
   --intro-copy-translate: 24px;
   font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", "Meiryo", system-ui, sans-serif;
 }
@@ -214,15 +216,16 @@ a {
   width: min(58vw, 470px);
   aspect-ratio: 1;
   opacity: var(--intro-logo-opacity);
-  transform: translateY(var(--intro-logo-translate)) scale(var(--intro-logo-scale));
+  transform: translate3d(var(--intro-logo-x), var(--intro-logo-translate), 0) scale(var(--intro-logo-scale));
   filter: drop-shadow(0 34px 90px rgba(255, 255, 255, 0.12));
-  transition: opacity 120ms linear, transform 120ms linear;
+  will-change: opacity, transform;
 }
 
 .intro-logo {
   width: 100%;
   height: auto;
-  filter: invert(1) contrast(1.28);
+  opacity: 0.82;
+  filter: invert(1) contrast(1.08) brightness(0.72);
   mix-blend-mode: screen;
 }
 
@@ -231,9 +234,11 @@ a {
   z-index: 2;
   right: clamp(20px, 7vw, 96px);
   bottom: clamp(78px, 11vh, 118px);
-  max-width: min(500px, calc(100vw - 40px));
+  max-width: min(440px, calc(100vw - 40px));
   opacity: var(--intro-copy-opacity);
-  transform: translateY(var(--intro-copy-translate));
+  transform: translate3d(var(--intro-copy-x), var(--intro-copy-translate), 0);
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.72);
+  will-change: opacity, transform;
 }
 
 .eyebrow {
@@ -265,7 +270,7 @@ h3 {
 }
 
 h1 {
-  font-size: clamp(38px, 7vw, 86px);
+  font-size: clamp(38px, 6.2vw, 76px);
 }
 
 h2 {
@@ -685,7 +690,8 @@ h3 {
   .intro-copy {
     right: 20px;
     left: 20px;
-    bottom: 88px;
+    bottom: 76px;
+    max-width: calc(100vw - 40px);
   }
 
   .contact-logo-card {
@@ -722,7 +728,7 @@ h3 {
   }
 
   .intro-logo-wrap {
-    width: min(78vw, 310px);
+    width: min(72vw, 286px);
   }
 
   .scroll-cue {
