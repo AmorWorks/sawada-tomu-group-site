@@ -1,10 +1,12 @@
 const body = document.body;
 const header = document.querySelector("[data-header]");
 const intro = document.querySelector("[data-intro]");
-const introVideo = document.querySelector(".intro-video");
 const menuToggle = document.querySelector("[data-menu-toggle]");
 const nav = document.querySelector("[data-nav]");
 const year = document.querySelector("[data-year]");
+const contactForm = document.querySelector("[data-contact-form]");
+const formStatus = document.querySelector("[data-form-status]");
+const formSummary = document.querySelector("[data-form-summary]");
 
 body.classList.add("js-ready");
 
@@ -14,46 +16,36 @@ function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
 }
 
-function easeOutCubic(value) {
-  return 1 - Math.pow(1 - value, 3);
-}
-
 function updateIntro() {
-  if (!intro) return;
+  if (!intro) {
+    header?.classList.toggle("is-scrolled", window.scrollY > 18);
+    return;
+  }
 
   const introScrollable = Math.max(intro.offsetHeight - window.innerHeight, 1);
   const progress = clamp(window.scrollY / introScrollable, 0, 1);
-  const layoutProgress = easeOutCubic(clamp((progress - 0.22) / 0.68, 0, 1));
-  const copyProgress = easeOutCubic(clamp((progress - 0.56) / 0.34, 0, 1));
-  const isDesktop = window.innerWidth > 900;
-  const isMobile = window.innerWidth <= 560;
-  const logoOpacity = clamp(progress * 1.35, 0, 1);
-  const videoOpacity = 0.22 + progress * 0.18;
-  const videoScale = 1.06 - progress * 0.035;
-  const logoX = isDesktop ? -window.innerWidth * 0.18 * layoutProgress : 0;
-  const logoLift = isMobile ? -86 * layoutProgress : 0;
-  const logoTranslate = (1 - progress) * 46 + logoLift;
-  const logoScale = 0.82 + progress * 0.18;
-  const copyOpacity = copyProgress;
-  const copyX = isDesktop ? 28 * (1 - copyProgress) : 0;
-  const copyTranslate = (1 - progress) * 24;
-  const overlayOpacity = 0.15 + progress * 0.55;
+  const copyProgress = 1;
+  const logoOpacity = 0.16;
+  const photoScale = 1.06 - progress * 0.035;
+  const logoX = 0;
+  const logoTranslate = 0;
+  const logoScale = 1;
+  const copyX = 0;
+  const copyTranslate = 0;
+  const overlayOpacity = 0.88;
 
-  document.documentElement.style.setProperty("--intro-progress", progress.toFixed(3));
-  document.documentElement.style.setProperty("--intro-video-opacity", videoOpacity.toFixed(3));
-  document.documentElement.style.setProperty("--intro-video-scale", videoScale.toFixed(3));
+  document.documentElement.style.setProperty("--intro-photo-opacity", "1");
+  document.documentElement.style.setProperty("--intro-photo-scale", photoScale.toFixed(3));
   document.documentElement.style.setProperty("--intro-logo-opacity", logoOpacity.toFixed(3));
   document.documentElement.style.setProperty("--intro-logo-x", `${logoX.toFixed(1)}px`);
   document.documentElement.style.setProperty("--intro-logo-translate", `${logoTranslate.toFixed(1)}px`);
   document.documentElement.style.setProperty("--intro-logo-scale", logoScale.toFixed(3));
-  document.documentElement.style.setProperty("--intro-copy-opacity", copyOpacity.toFixed(3));
+  document.documentElement.style.setProperty("--intro-copy-opacity", copyProgress.toFixed(3));
   document.documentElement.style.setProperty("--intro-copy-x", `${copyX.toFixed(1)}px`);
   document.documentElement.style.setProperty("--intro-copy-translate", `${copyTranslate.toFixed(1)}px`);
   document.documentElement.style.setProperty("--intro-overlay-opacity", overlayOpacity.toFixed(3));
 
-  if (header) {
-    header.classList.toggle("is-scrolled", window.scrollY > 18);
-  }
+  header?.classList.toggle("is-scrolled", window.scrollY > 18);
 }
 
 function scheduleIntroUpdate() {
@@ -71,6 +63,20 @@ function closeMenu() {
   menuToggle?.setAttribute("aria-expanded", "false");
 }
 
+function buildContactSummary(form) {
+  const data = new FormData(form);
+  return [
+    "【STG ホームページ相談内容】",
+    `お名前: ${data.get("name") || "未入力"}`,
+    `連絡先: ${data.get("contact") || "未入力"}`,
+    `相談内容: ${data.get("type") || "未選択"}`,
+    `現場エリア: ${data.get("area") || "未入力"}`,
+    "",
+    "詳細:",
+    data.get("message") || "未入力",
+  ].join("\n");
+}
+
 menuToggle?.addEventListener("click", () => {
   const willOpen = !body.classList.contains("menu-open");
   body.classList.toggle("menu-open", willOpen);
@@ -82,16 +88,21 @@ nav?.querySelectorAll("a").forEach((link) => {
   link.addEventListener("click", closeMenu);
 });
 
+contactForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  if (!formSummary || !formStatus) return;
+
+  formSummary.hidden = false;
+  formSummary.value = buildContactSummary(contactForm);
+  formStatus.textContent = "下の控えをコピーして、LINEやメールで送れる状態にしました。";
+});
+
 window.addEventListener("scroll", scheduleIntroUpdate, { passive: true });
 window.addEventListener("resize", scheduleIntroUpdate);
 
 if (year) {
   year.textContent = new Date().getFullYear();
-}
-
-if (introVideo && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-  introVideo.loop = false;
-  introVideo.play?.().catch(() => {});
 }
 
 updateIntro();
