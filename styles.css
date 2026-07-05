@@ -1180,6 +1180,164 @@ p {
   color: var(--ink);
 }
 
+.home-message {
+  margin-top: 72px;
+}
+
+.route-section {
+  background: var(--paper);
+}
+
+.route-grid,
+.evidence-grid,
+.belief-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.route-card,
+.evidence-grid article,
+.belief-grid article {
+  display: grid;
+  min-height: 250px;
+  padding: 26px;
+  color: var(--ink);
+  background: var(--white);
+  border: 1px solid var(--line-light);
+  border-radius: 8px;
+}
+
+.route-card span,
+.evidence-grid span,
+.belief-grid span,
+.service-detail-card span {
+  color: var(--gold);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.route-card h3,
+.evidence-grid h3,
+.belief-grid h3 {
+  margin-top: 36px;
+}
+
+.route-card p,
+.evidence-grid p,
+.belief-grid p {
+  margin-top: 12px;
+  color: rgba(20, 20, 20, 0.68);
+}
+
+.service-detail-list {
+  display: grid;
+  gap: 18px;
+}
+
+.service-detail-card {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.42fr) minmax(320px, 1fr);
+  gap: 0;
+  overflow: hidden;
+  background: #fbfaf6;
+  border: 1px solid var(--line-light);
+  border-radius: 8px;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.06);
+}
+
+.service-detail-card img {
+  width: 100%;
+  height: 100%;
+  min-height: 290px;
+  object-fit: cover;
+  filter: brightness(0.82) saturate(0.9);
+}
+
+.service-detail-card div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 34px;
+}
+
+.service-detail-card h3 {
+  margin-top: 18px;
+  font-size: 1.7rem;
+}
+
+.service-detail-card p {
+  margin-top: 16px;
+  color: rgba(20, 20, 20, 0.68);
+}
+
+.process-strip.vertical {
+  grid-template-columns: 1fr;
+}
+
+.evidence-section,
+.recruit-detail-section,
+.map-section {
+  background: var(--white);
+}
+
+.recruit-section.standalone {
+  min-height: auto;
+}
+
+.map-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.52fr) minmax(320px, 1fr);
+  gap: 54px;
+  align-items: stretch;
+}
+
+.map-frame {
+  min-height: 430px;
+  overflow: hidden;
+  background: var(--mist);
+  border: 1px solid var(--line-light);
+  border-radius: 8px;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.08);
+}
+
+.map-frame iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 430px;
+  border: 0;
+}
+
+.mini-cta {
+  padding-top: 72px;
+  padding-bottom: 92px;
+}
+
+.split-cta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 28px;
+  align-items: center;
+  padding: 34px;
+  color: var(--white);
+  background:
+    linear-gradient(135deg, rgba(191, 146, 81, 0.2), transparent 44%),
+    var(--black);
+  border-radius: 8px;
+}
+
+.split-cta p:not(.eyebrow) {
+  max-width: 46em;
+  margin-top: 14px;
+  color: rgba(255, 255, 255, 0.74);
+}
+
+.split-cta .primary-button {
+  min-width: 210px;
+}
+
 body.js-ready [data-reveal] {
   opacity: 0;
   transform: translateY(22px);
@@ -1210,7 +1368,9 @@ body.js-ready [data-reveal].is-visible {
   .recruit-grid,
   .message-grid,
   .contact-layout,
-  .company-layout {
+  .company-layout,
+  .service-detail-card,
+  .map-layout {
     grid-template-columns: 1fr;
   }
 
@@ -1229,8 +1389,15 @@ body.js-ready [data-reveal].is-visible {
 
   .principle-grid,
   .opening-cards,
-  .process-strip {
+  .process-strip,
+  .route-grid,
+  .evidence-grid,
+  .belief-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .service-detail-card img {
+    min-height: 260px;
   }
 }
 
@@ -1388,7 +1555,10 @@ body.js-ready [data-reveal].is-visible {
   .service-grid,
   .process-strip,
   .strength-list,
-  .works-list {
+  .works-list,
+  .route-grid,
+  .evidence-grid,
+  .belief-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1422,6 +1592,34 @@ body.js-ready [data-reveal].is-visible {
 
   .contact-form {
     padding: 22px;
+  }
+
+  .service-detail-card div {
+    padding: 24px;
+  }
+
+  .service-detail-card img {
+    min-height: 220px;
+  }
+
+  .route-card,
+  .evidence-grid article,
+  .belief-grid article {
+    min-height: auto;
+  }
+
+  .split-cta {
+    grid-template-columns: 1fr;
+    padding: 26px;
+  }
+
+  .split-cta .primary-button {
+    min-width: 0;
+  }
+
+  .map-frame,
+  .map-frame iframe {
+    min-height: 340px;
   }
 
   .company-table,

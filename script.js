@@ -20,7 +20,7 @@ function clamp(value, min, max) {
 function updateIntro() {
   const shouldCompactHeader = window.scrollY > 18 || body.classList.contains("sub-page");
   header?.classList.toggle("is-scrolled", shouldCompactHeader);
-  body.classList.toggle("show-mobile-bar", window.scrollY > 120 || body.classList.contains("sub-page"));
+  body.classList.toggle("show-mobile-bar", window.scrollY > 120);
 
   if (!intro) return;
 
@@ -79,7 +79,14 @@ function setupReveal() {
     }
   );
 
-  revealTargets.forEach((target) => observer.observe(target));
+  revealTargets.forEach((target) => {
+    const rect = target.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.92) {
+      target.classList.add("is-visible");
+      return;
+    }
+    observer.observe(target);
+  });
 }
 
 menuToggle?.addEventListener("click", () => {
@@ -105,6 +112,8 @@ contactForm?.addEventListener("submit", (event) => {
 
 window.addEventListener("scroll", scheduleIntroUpdate, { passive: true });
 window.addEventListener("resize", scheduleIntroUpdate);
+window.addEventListener("load", scheduleIntroUpdate);
+window.addEventListener("pageshow", scheduleIntroUpdate);
 
 if (year) {
   year.textContent = new Date().getFullYear();
@@ -112,3 +121,5 @@ if (year) {
 
 setupReveal();
 updateIntro();
+setTimeout(updateIntro, 160);
+setTimeout(updateIntro, 420);
