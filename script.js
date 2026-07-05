@@ -7,6 +7,7 @@ const year = document.querySelector("[data-year]");
 const contactForm = document.querySelector("[data-contact-form]");
 const formStatus = document.querySelector("[data-form-status]");
 const formSummary = document.querySelector("[data-form-summary]");
+const revealTargets = document.querySelectorAll("[data-reveal]");
 
 body.classList.add("js-ready");
 
@@ -17,35 +18,14 @@ function clamp(value, min, max) {
 }
 
 function updateIntro() {
-  if (!intro) {
-    header?.classList.toggle("is-scrolled", window.scrollY > 18);
-    return;
-  }
+  const shouldCompactHeader = window.scrollY > 18 || body.classList.contains("sub-page");
+  header?.classList.toggle("is-scrolled", shouldCompactHeader);
+  body.classList.toggle("show-mobile-bar", window.scrollY > 120 || body.classList.contains("sub-page"));
 
-  const introScrollable = Math.max(intro.offsetHeight - window.innerHeight, 1);
-  const progress = clamp(window.scrollY / introScrollable, 0, 1);
-  const copyProgress = 1;
-  const logoOpacity = 0.16;
-  const photoScale = 1.06 - progress * 0.035;
-  const logoX = 0;
-  const logoTranslate = 0;
-  const logoScale = 1;
-  const copyX = 0;
-  const copyTranslate = 0;
-  const overlayOpacity = 0.88;
+  if (!intro) return;
 
-  document.documentElement.style.setProperty("--intro-photo-opacity", "1");
-  document.documentElement.style.setProperty("--intro-photo-scale", photoScale.toFixed(3));
-  document.documentElement.style.setProperty("--intro-logo-opacity", logoOpacity.toFixed(3));
-  document.documentElement.style.setProperty("--intro-logo-x", `${logoX.toFixed(1)}px`);
-  document.documentElement.style.setProperty("--intro-logo-translate", `${logoTranslate.toFixed(1)}px`);
-  document.documentElement.style.setProperty("--intro-logo-scale", logoScale.toFixed(3));
-  document.documentElement.style.setProperty("--intro-copy-opacity", copyProgress.toFixed(3));
-  document.documentElement.style.setProperty("--intro-copy-x", `${copyX.toFixed(1)}px`);
-  document.documentElement.style.setProperty("--intro-copy-translate", `${copyTranslate.toFixed(1)}px`);
-  document.documentElement.style.setProperty("--intro-overlay-opacity", overlayOpacity.toFixed(3));
-
-  header?.classList.toggle("is-scrolled", window.scrollY > 18);
+  const progress = clamp(window.scrollY / Math.max(intro.offsetHeight, 1), 0, 1);
+  document.documentElement.style.setProperty("--hero-shift", `${(progress * 22).toFixed(1)}px`);
 }
 
 function scheduleIntroUpdate() {
@@ -77,6 +57,31 @@ function buildContactSummary(form) {
   ].join("\n");
 }
 
+function setupReveal() {
+  if (!revealTargets.length) return;
+
+  if (!("IntersectionObserver" in window)) {
+    revealTargets.forEach((target) => target.classList.add("is-visible"));
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    },
+    {
+      rootMargin: "0px 0px -10% 0px",
+      threshold: 0.12,
+    }
+  );
+
+  revealTargets.forEach((target) => observer.observe(target));
+}
+
 menuToggle?.addEventListener("click", () => {
   const willOpen = !body.classList.contains("menu-open");
   body.classList.toggle("menu-open", willOpen);
@@ -95,7 +100,7 @@ contactForm?.addEventListener("submit", (event) => {
 
   formSummary.hidden = false;
   formSummary.value = buildContactSummary(contactForm);
-  formStatus.textContent = "下の控えをコピーして、LINEやメールで送れる状態にしました。";
+  formStatus.textContent = "下の控えをコピーして、LINE・Instagram DM・メールなどで送れる状態にしました。";
 });
 
 window.addEventListener("scroll", scheduleIntroUpdate, { passive: true });
@@ -105,4 +110,5 @@ if (year) {
   year.textContent = new Date().getFullYear();
 }
 
+setupReveal();
 updateIntro();
