@@ -107,7 +107,7 @@ contactForm?.addEventListener("submit", (event) => {
 
   formSummary.hidden = false;
   formSummary.value = buildContactSummary(contactForm);
-  formStatus.textContent = "下の控えをコピーして、LINE・Instagram DM・メールなどで送れる状態にしました。";
+  formStatus.textContent = "控えを作成しました。LINE・Instagram DM・メール送信時にご利用ください。";
 });
 
 window.addEventListener("scroll", scheduleIntroUpdate, { passive: true });

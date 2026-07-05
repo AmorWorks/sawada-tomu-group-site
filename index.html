@@ -10,7 +10,7 @@
     <meta property="og:type" content="website">
     <meta property="og:image" content="assets/stg-warm-logo.jpg">
     <link rel="icon" href="assets/stg-sharp-logo.jpg">
-    <link rel="stylesheet" href="styles.css?v=20260706-top-contact">
+    <link rel="stylesheet" href="styles.css?v=20260706-nav-contact-clean">
   </head>
   <body>
     <header class="site-header" data-header>
@@ -56,8 +56,8 @@
               <span>防草シート施工</span>
             </div>
             <div class="hero-actions">
-              <a class="primary-button" href="company.html">信用情報を見る</a>
-              <a class="ghost-button" href="#contact">相談する</a>
+              <a class="primary-button" href="#contact">相談する</a>
+              <a class="ghost-button" href="services.html">業務内容を見る</a>
             </div>
           </div>
 
@@ -132,9 +132,14 @@
           <div class="section-heading" data-reveal>
             <p class="eyebrow">Navigation</p>
             <h2>詳しく知りたい情報へ。</h2>
-            <p>トップページは理念と入口に絞り、詳細は目的別のページで確認できます。</p>
+            <p>トップページは理念と問い合わせに絞り、信用情報や業務詳細は目的別のページで確認できます。</p>
           </div>
           <div class="route-grid">
+            <a class="route-card" href="company.html" data-reveal>
+              <span>Company</span>
+              <h3>会社概要</h3>
+              <p>所在地、代表者、設立、売上、従業員数、車両保有、MAPなど、信用確認に必要な情報を整理。</p>
+            </a>
             <a class="route-card" href="services.html" data-reveal>
               <span>Services</span>
               <h3>業務内容</h3>
@@ -164,8 +169,8 @@
           <div class="contact-copy" data-reveal>
             <p class="eyebrow">Contact</p>
             <h2>相談は、使いやすい方法で。</h2>
-            <p>伐採抜根、草刈り年間管理、剪定、外構工事、足場仮設、防草シート施工のご相談、求人についてのご連絡はこちらから。</p>
-            <p>現場写真がある場合は、LINEまたはInstagram DMから送ると状況を確認しやすくなります。メールフォームは受信先メールアドレスの確認後に接続します。</p>
+            <p>伐採抜根、草刈り年間管理、剪定、外構工事、足場仮設、防草シート施工、求人についてのご連絡はこちらから。</p>
+            <p>現場写真がある場合は、LINEまたはInstagram DMが便利です。フォームは受信先メールアドレス確認後に送信接続します。</p>
             <div class="contact-methods" aria-label="問い合わせ方法">
               <a href="tel:08084907800">
                 <span>電話</span>
@@ -181,14 +186,14 @@
               </a>
               <a href="#form">
                 <span>メールフォーム</span>
-                <strong>相談内容を控えとして作成</strong>
+                <strong>内容を整理して残す</strong>
               </a>
             </div>
           </div>
 
           <form class="contact-form" id="form" data-contact-form data-form-endpoint="" data-reveal>
-            <h3>相談内容を整理する</h3>
-            <p class="form-lead">送信先メールが未確定のため、現時点では入力内容を控えとして作成します。</p>
+            <h3>フォームで相談内容を残す</h3>
+            <p class="form-lead">今は入力内容の控えを作成できます。送信機能は受信先確認後に接続します。</p>
             <label>
               お名前
               <input type="text" name="name" autocomplete="name" placeholder="例: 山田 太郎">
@@ -219,7 +224,7 @@
               詳細
               <textarea name="message" rows="5" placeholder="相談内容、希望時期、写真の有無など"></textarea>
             </label>
-            <button class="primary-button form-button" type="submit">相談内容を控えとして作成</button>
+            <button class="primary-button form-button" type="submit">控えを作成する</button>
             <p class="form-status" data-form-status>メール送信は受信先確認後に接続します。</p>
             <textarea class="form-summary" data-form-summary rows="6" readonly hidden></textarea>
           </form>
@@ -261,6 +266,6 @@
       </div>
     </footer>
 
-    <script src="script.js?v=20260705-multipage"></script>
+    <script src="script.js?v=20260706-nav-contact-clean"></script>
   </body>
 </html>
