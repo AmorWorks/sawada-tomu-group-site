@@ -476,7 +476,6 @@ p {
 }
 
 .section,
-.opening-section,
 .company-section {
   padding: 108px clamp(18px, 4%, 56px);
 }
@@ -513,30 +512,6 @@ p {
   margin-top: 20px;
 }
 
-.opening-section {
-  padding-top: 54px;
-  padding-bottom: 64px;
-  background: var(--paper);
-}
-
-.opening-grid {
-  display: grid;
-  grid-template-columns: minmax(260px, 0.7fr) minmax(320px, 1fr);
-  gap: 46px;
-  align-items: start;
-}
-
-.opening-copy h2 {
-  font-size: 2.1rem;
-}
-
-.opening-cards {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-}
-
-.opening-cards article,
 .principle-card,
 .service-card,
 .work-card,
@@ -548,14 +523,6 @@ p {
   border-radius: 8px;
 }
 
-.opening-cards article {
-  min-height: 220px;
-  padding: 24px;
-  background: var(--white);
-  border: 1px solid var(--line-light);
-}
-
-.opening-cards span,
 .principle-card span,
 .card-number,
 .work-card span,
@@ -565,15 +532,6 @@ p {
   color: var(--gold);
   font-size: 0.78rem;
   font-weight: 900;
-}
-
-.opening-cards h3 {
-  margin-top: 36px;
-}
-
-.opening-cards p {
-  margin-top: 12px;
-  color: rgba(20, 20, 20, 0.68);
 }
 
 .philosophy-section {
@@ -1564,17 +1522,10 @@ body.js-ready [data-reveal].is-visible {
   }
 
   .section,
-  .opening-section,
   .company-section {
     padding: 72px 16px;
   }
 
-  .opening-section {
-    padding-top: 24px;
-    padding-bottom: 52px;
-  }
-
-  .opening-cards,
   .principle-grid,
   .service-grid,
   .process-strip,
