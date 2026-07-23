@@ -43,6 +43,9 @@ function updateStory() {
       frame.style.setProperty("--frame-scale", "1");
       frame.setAttribute("aria-hidden", String(!isFinal));
       frame.classList.toggle("is-current", isFinal);
+      if (isFinal) {
+        frame.style.setProperty("--final-shade-opacity", "1");
+      }
     });
     storyHome?.classList.add("is-visible");
     storyHome?.style.setProperty("opacity", "1");
@@ -62,9 +65,16 @@ function updateStory() {
   const blend = baseIndex < storyFrames.length - 1
     ? smoothstep((frameProgress - 0.68) / 0.32)
     : 0;
-  const currentIndex = blend >= 0.5
+  const finalIndex = storyFrames.length - 1;
+  const preFinalFade = smoothstep((progress - 0.72) / 0.035);
+  const finalReveal = smoothstep((progress - 0.765) / 0.035);
+  let currentIndex = blend >= 0.5
     ? Math.min(baseIndex + 1, storyFrames.length - 1)
     : baseIndex;
+
+  if (progress >= 0.72) {
+    currentIndex = finalReveal >= 0.5 ? finalIndex : finalIndex - 1;
+  }
 
   storyFrames.forEach((frame, index) => {
     let opacity = 0;
@@ -77,7 +87,19 @@ function updateStory() {
       opacity = blend;
     }
 
-    const scale = 1.075 - Math.min(localProgress, 1) * 0.035;
+    if (index === finalIndex - 1 && progress >= 0.72) {
+      opacity = 1 - preFinalFade;
+      localProgress = 1;
+    }
+
+    if (index === finalIndex && progress >= 0.72) {
+      opacity = finalReveal;
+      localProgress = 0;
+    }
+
+    const scale = index === finalIndex
+      ? 1.16 - finalReveal * 0.16
+      : 1.075 - Math.min(localProgress, 1) * 0.035;
     const caption = frame.querySelector(".story-caption");
 
     frame.style.setProperty("--frame-opacity", opacity.toFixed(3));
@@ -92,7 +114,11 @@ function updateStory() {
     }
   });
 
-  const homeProgress = smoothstep((progress - 0.91) / 0.09);
+  const homeProgress = smoothstep((progress - 0.93) / 0.07);
+  storyFrames[finalIndex]?.style.setProperty(
+    "--final-shade-opacity",
+    (0.22 + homeProgress * 0.78).toFixed(3)
+  );
   if (storyHome) {
     storyHome.style.opacity = homeProgress.toFixed(3);
     storyHome.style.transform = `translate3d(0, ${((1 - homeProgress) * 28).toFixed(1)}px, 0)`;

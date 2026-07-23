@@ -314,13 +314,16 @@ p {
 }
 
 .story-frame-final .story-frame-image {
-  filter: contrast(1.03) brightness(0.76) saturate(0.9);
+  filter: contrast(1.03) brightness(0.88) saturate(0.94);
+  transform-origin: center 44%;
 }
 
 .story-frame-final .story-frame-shade {
   background:
     linear-gradient(90deg, rgba(0, 0, 0, 0.84), rgba(0, 0, 0, 0.26) 58%, rgba(0, 0, 0, 0.18)),
     linear-gradient(180deg, rgba(0, 0, 0, 0.18), transparent 42%, rgba(0, 0, 0, 0.8));
+  opacity: var(--final-shade-opacity, 0.22);
+  will-change: opacity;
 }
 
 .story-caption {
@@ -1748,7 +1751,6 @@ body.js-ready [data-reveal].is-visible {
     height: auto;
     object-fit: contain;
     filter: contrast(1.02) brightness(0.9) saturate(0.95);
-    transform: none;
   }
 
   .story-frame-final .story-frame-shade {
