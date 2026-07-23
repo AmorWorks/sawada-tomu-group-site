@@ -1,6 +1,13 @@
 const body = document.body;
 const header = document.querySelector("[data-header]");
 const intro = document.querySelector("[data-intro]");
+const storyHero = document.querySelector("[data-story-hero]");
+const storyFrames = Array.from(document.querySelectorAll("[data-story-frame]"));
+const storyHome = document.querySelector("[data-story-home]");
+const storyProgress = document.querySelector("[data-story-progress]");
+const storyProgressBar = document.querySelector("[data-story-progress-bar]");
+const storyCounter = document.querySelector("[data-story-counter]");
+const storyScrollCue = document.querySelector("[data-story-scroll-cue]");
 const menuToggle = document.querySelector("[data-menu-toggle]");
 const nav = document.querySelector("[data-nav]");
 const year = document.querySelector("[data-year]");
@@ -17,10 +24,106 @@ function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
 }
 
+function smoothstep(value) {
+  const progress = clamp(value, 0, 1);
+  return progress * progress * (3 - 2 * progress);
+}
+
+function updateStory() {
+  if (!storyHero || !storyFrames.length) return false;
+
+  const rect = storyHero.getBoundingClientRect();
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const storyActive = rect.top <= 0 && rect.bottom > window.innerHeight;
+
+  if (reducedMotion) {
+    storyFrames.forEach((frame, index) => {
+      const isFinal = index === storyFrames.length - 1;
+      frame.style.setProperty("--frame-opacity", isFinal ? "1" : "0");
+      frame.style.setProperty("--frame-scale", "1");
+      frame.setAttribute("aria-hidden", String(!isFinal));
+      frame.classList.toggle("is-current", isFinal);
+    });
+    storyHome?.classList.add("is-visible");
+    storyHome?.style.setProperty("opacity", "1");
+    storyHome?.style.setProperty("transform", "none");
+    if (storyHome) {
+      storyHome.inert = false;
+      storyHome.setAttribute("aria-hidden", "false");
+    }
+    return storyActive;
+  }
+
+  const scrollRange = Math.max(storyHero.offsetHeight - window.innerHeight, 1);
+  const progress = clamp(-rect.top / scrollRange, 0, 1);
+  const scaledProgress = progress * storyFrames.length;
+  const baseIndex = Math.min(Math.floor(scaledProgress), storyFrames.length - 1);
+  const frameProgress = scaledProgress - baseIndex;
+  const blend = baseIndex < storyFrames.length - 1
+    ? smoothstep((frameProgress - 0.68) / 0.32)
+    : 0;
+  const currentIndex = blend >= 0.5
+    ? Math.min(baseIndex + 1, storyFrames.length - 1)
+    : baseIndex;
+
+  storyFrames.forEach((frame, index) => {
+    let opacity = 0;
+    let localProgress = 0;
+
+    if (index === baseIndex) {
+      opacity = baseIndex === storyFrames.length - 1 ? 1 : 1 - blend;
+      localProgress = frameProgress;
+    } else if (index === baseIndex + 1) {
+      opacity = blend;
+    }
+
+    const scale = 1.075 - Math.min(localProgress, 1) * 0.035;
+    const caption = frame.querySelector(".story-caption");
+
+    frame.style.setProperty("--frame-opacity", opacity.toFixed(3));
+    frame.style.setProperty("--frame-scale", scale.toFixed(4));
+    frame.classList.toggle("is-current", index === currentIndex);
+    frame.setAttribute("aria-hidden", String(index !== currentIndex));
+
+    if (caption) {
+      const captionOpacity = smoothstep(clamp(opacity * 1.35, 0, 1));
+      caption.style.setProperty("--caption-opacity", captionOpacity.toFixed(3));
+      caption.style.setProperty("--caption-shift", `${((1 - captionOpacity) * 18).toFixed(1)}px`);
+    }
+  });
+
+  const homeProgress = smoothstep((progress - 0.91) / 0.09);
+  if (storyHome) {
+    storyHome.style.opacity = homeProgress.toFixed(3);
+    storyHome.style.transform = `translate3d(0, ${((1 - homeProgress) * 28).toFixed(1)}px, 0)`;
+    storyHome.classList.toggle("is-visible", homeProgress > 0.7);
+    storyHome.inert = homeProgress <= 0.7;
+    storyHome.setAttribute("aria-hidden", String(homeProgress <= 0.7));
+  }
+
+  if (storyProgress) {
+    storyProgress.style.setProperty("--story-progress", progress.toFixed(4));
+    storyProgress.style.opacity = (1 - homeProgress).toFixed(3);
+    storyProgress.setAttribute("aria-valuenow", String(currentIndex + 1));
+  }
+  if (storyProgressBar) {
+    storyProgressBar.style.setProperty("--story-progress", progress.toFixed(4));
+  }
+  if (storyCounter) {
+    storyCounter.textContent = String(currentIndex + 1).padStart(2, "0");
+  }
+  storyScrollCue?.classList.toggle("is-hidden", progress > 0.035);
+
+  return storyActive;
+}
+
 function updateIntro() {
-  const shouldCompactHeader = window.scrollY > 18 || body.classList.contains("sub-page");
+  const storyActive = updateStory();
+  const shouldCompactHeader =
+    (window.scrollY > 18 && !storyActive) || body.classList.contains("sub-page");
   header?.classList.toggle("is-scrolled", shouldCompactHeader);
-  body.classList.toggle("show-mobile-bar", window.scrollY > 120);
+  body.classList.toggle("story-active", storyActive);
+  body.classList.toggle("show-mobile-bar", window.scrollY > 120 && !storyActive);
 
   if (!intro) return;
 
