@@ -1145,6 +1145,7 @@ body:not(.js-ready) .story-home {
 }
 
 .message-section {
+  color: var(--ink);
   background: var(--white);
 }
 
@@ -1413,7 +1414,7 @@ body:not(.js-ready) .story-home {
 }
 
 .home-message {
-  margin-top: 72px;
+  margin-top: 0;
 }
 
 .route-section {
@@ -1707,6 +1708,10 @@ body.js-ready [data-reveal].is-visible {
   .portrait-panel {
     min-height: 320px;
   }
+
+  .portrait-panel img {
+    min-height: 320px;
+  }
 }
 
 @media (max-width: 700px) {
@@ -1924,6 +1929,15 @@ body.js-ready [data-reveal].is-visible {
 
   .philosophy-lines span {
     font-size: 1.55rem;
+  }
+
+  .home-message .portrait-panel,
+  .home-message .portrait-panel img {
+    min-height: 0;
+  }
+
+  .home-message .portrait-panel {
+    aspect-ratio: 4 / 3;
   }
 
   .contact-form {
