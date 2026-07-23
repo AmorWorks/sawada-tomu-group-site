@@ -1194,6 +1194,23 @@ body:not(.js-ready) .story-home {
   color: rgba(20, 20, 20, 0.7);
 }
 
+.message-copy .message-signature {
+  display: grid;
+  gap: 2px;
+  margin-top: 30px;
+  color: var(--ink);
+  text-align: right;
+}
+
+.message-signature span {
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.message-signature strong {
+  font-size: 1rem;
+}
+
 .pending-note {
   padding: 14px 16px;
   background: var(--mist);
