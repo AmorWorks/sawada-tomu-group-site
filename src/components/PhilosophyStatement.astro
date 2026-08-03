@@ -1,0 +1,136 @@
+---
+const principles = [
+  { number: "01", line: "曲がったことはしない", result: "それが仕事に表れる" },
+  { number: "02", line: "嘘はつかない", result: "それが人柄を創る" },
+  { number: "03", line: "信念を持つ", result: "それが己を強くする" },
+  { number: "04", line: "人への感謝を忘れない", result: "それが未来に繋がる" },
+  { number: "05", line: "だから今の我々が", result: "生かされ生きている" }
+];
+---
+
+<section class="philosophy section-shell" id="philosophy" aria-labelledby="philosophy-title">
+  <div class="section-kicker is-light" data-reveal>
+    <span>PHILOSOPHY</span>
+    <span>判断基準</span>
+  </div>
+
+  <div class="philosophy-grid">
+    <div class="philosophy-lead" data-reveal>
+      <p>OUR PROMISE</p>
+      <h2 id="philosophy-title">理念は、<br />現場で使うもの。</h2>
+      <p>迷ったとき、最後に戻るのは難しい言葉ではなく、どう仕事と人に向き合うかです。</p>
+    </div>
+
+    <ol class="philosophy-list" aria-label="STGの経営理念">
+      {principles.map((principle) => (
+        <li data-reveal>
+          <span>{principle.number}</span>
+          <strong>{principle.line}</strong>
+          <p>{principle.result}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .philosophy {
+    background:
+      linear-gradient(90deg, transparent calc(50% - 0.5px), var(--line-light) 50%, transparent calc(50% + 0.5px)),
+      var(--paper);
+    color: var(--ink);
+  }
+
+  .philosophy-grid {
+    display: grid;
+    grid-template-columns: minmax(18rem, 0.8fr) minmax(0, 1.2fr);
+    gap: clamp(3rem, 8vw, 10rem);
+    padding: clamp(4rem, 10vw, 10rem) var(--page-pad);
+  }
+
+  .philosophy-lead {
+    position: sticky;
+    top: calc(var(--header-height) + 3rem);
+    align-self: start;
+  }
+
+  .philosophy-lead > p:first-child {
+    margin: 0 0 2rem;
+    color: var(--brass-dark);
+    font: 600 0.72rem/1 var(--font-condensed);
+    letter-spacing: 0.18em;
+  }
+
+  .philosophy-lead h2 {
+    margin: 0;
+    font-size: clamp(3rem, 6vw, 7rem);
+    line-height: 0.98;
+    letter-spacing: -0.055em;
+  }
+
+  .philosophy-lead > p:last-child {
+    max-width: 30rem;
+    margin: 3rem 0 0;
+    color: var(--ink-soft);
+    line-height: 2;
+  }
+
+  .philosophy-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--line-light);
+  }
+
+  .philosophy-list li {
+    display: grid;
+    grid-template-columns: 3.25rem minmax(0, 1fr) minmax(8rem, 0.55fr);
+    gap: clamp(1rem, 3vw, 3rem);
+    align-items: baseline;
+    min-height: 9rem;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--line-light);
+  }
+
+  .philosophy-list span {
+    color: var(--brass-dark);
+    font: 600 0.7rem/1 var(--font-condensed);
+  }
+
+  .philosophy-list strong {
+    font-size: clamp(1.5rem, 3vw, 3rem);
+    line-height: 1.35;
+    letter-spacing: -0.025em;
+  }
+
+  .philosophy-list p {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+
+  @media (max-width: 840px) {
+    .philosophy {
+      background: var(--paper);
+    }
+
+    .philosophy-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .philosophy-lead {
+      position: relative;
+      top: auto;
+    }
+
+    .philosophy-list li {
+      grid-template-columns: 2.4rem 1fr;
+      min-height: 0;
+    }
+
+    .philosophy-list p {
+      grid-column: 2;
+    }
+  }
+</style>

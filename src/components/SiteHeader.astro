@@ -1,0 +1,345 @@
+---
+const home = import.meta.env.BASE_URL;
+
+const navItems = [
+  { label: "信頼の理由", href: `${home}#trust` },
+  { label: "業務内容", href: `${home}#services` },
+  { label: "仕事の姿勢", href: `${home}#work` },
+  { label: "ご相談の流れ", href: `${home}#process` },
+  { label: "私たちについて", href: `${home}#about` },
+  { label: "よくある質問", href: `${home}#faq` }
+];
+---
+
+<header class="site-header" data-site-header>
+  <a class="site-brand" href={home} aria-label="株式会社STG ホーム">
+    <span class="site-brand__mark">STG</span>
+    <span class="site-brand__name">
+      <strong>SAWADA TOMU GROUP</strong>
+      <small>株式会社STG</small>
+    </span>
+  </a>
+
+  <nav class="site-nav" aria-label="メインナビゲーション">
+    {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+  </nav>
+
+  <a class="site-header__contact" href={`${home}#contact`}>
+    <span>CONTACT</span>
+    <span aria-hidden="true">↘</span>
+  </a>
+
+  <button
+    class="site-menu-button"
+    type="button"
+    aria-expanded="false"
+    aria-controls="site-menu"
+    data-menu-button
+  >
+    <span class="site-menu-button__label">MENU</span>
+    <span class="site-menu-button__lines" aria-hidden="true"><i></i><i></i></span>
+  </button>
+
+  <div class="site-menu" id="site-menu" data-site-menu aria-hidden="true">
+    <nav aria-label="スマートフォンメニュー">
+      {navItems.map((item, index) => (
+        <a href={item.href}>
+          <span>0{index + 1}</span>
+          <strong>{item.label}</strong>
+        </a>
+      ))}
+    </nav>
+    <a class="site-menu__contact" href={`${home}#contact`}>現場のことを相談する <span aria-hidden="true">→</span></a>
+    <p>あなたを笑顔にする会社</p>
+  </div>
+</header>
+
+<script>
+  const bindHeader = () => {
+    const header = document.querySelector<HTMLElement>("[data-site-header]");
+    if (!header || header.dataset.bound === "true") return;
+    header.dataset.bound = "true";
+
+    const button = header.querySelector<HTMLButtonElement>("[data-menu-button]");
+    const menu = header.querySelector<HTMLElement>("[data-site-menu]");
+
+    const setOpen = (open: boolean) => {
+      button?.setAttribute("aria-expanded", String(open));
+      menu?.setAttribute("aria-hidden", String(!open));
+      header.classList.toggle("is-menu-open", open);
+      document.body.classList.toggle("is-menu-open", open);
+    };
+
+    button?.addEventListener("click", () => {
+      setOpen(button.getAttribute("aria-expanded") !== "true");
+    });
+
+    menu?.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => setOpen(false)));
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") setOpen(false);
+    });
+
+    const updateHeader = () => header.classList.toggle("is-scrolled", window.scrollY > 24);
+    window.addEventListener("scroll", updateHeader, { passive: true });
+    updateHeader();
+  };
+
+  bindHeader();
+  document.addEventListener("astro:page-load", bindHeader);
+</script>
+
+<style>
+  .site-header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 100;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    height: var(--site-header-height);
+    color: white;
+    border-bottom: 1px solid rgb(255 255 255 / 0.18);
+    background: linear-gradient(180deg, rgb(0 0 0 / 0.46), transparent);
+    transition: background-color 240ms ease, border-color 240ms ease;
+  }
+
+  .site-header.is-scrolled,
+  .site-header.is-menu-open {
+    border-color: rgb(255 255 255 / 0.1);
+    background: rgb(13 21 16 / 0.94);
+    backdrop-filter: blur(16px);
+  }
+
+  .site-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding-inline: var(--page-pad) 1.5rem;
+    color: white;
+    text-decoration: none;
+  }
+
+  .site-brand__mark {
+    font-family: var(--font-condensed);
+    font-size: 1.55rem;
+    font-weight: 800;
+    letter-spacing: -0.07em;
+  }
+
+  .site-brand__name {
+    display: grid;
+    padding-left: 0.8rem;
+    border-left: 1px solid rgb(255 255 255 / 0.28);
+    line-height: 1.1;
+  }
+
+  .site-brand__name strong {
+    font-family: var(--font-condensed);
+    font-size: 0.56rem;
+    letter-spacing: 0.14em;
+  }
+
+  .site-brand__name small {
+    margin-top: 0.28rem;
+    color: rgb(255 255 255 / 0.64);
+    font-size: 0.57rem;
+    letter-spacing: 0.05em;
+  }
+
+  .site-nav {
+    display: flex;
+    align-items: stretch;
+    justify-content: flex-end;
+  }
+
+  .site-nav a,
+  .site-header__contact {
+    display: flex;
+    align-items: center;
+    padding-inline: clamp(0.6rem, 1.1vw, 1.25rem);
+    color: inherit;
+    border-left: 1px solid rgb(255 255 255 / 0.14);
+    font-size: clamp(0.62rem, 0.7vw, 0.72rem);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    transition: color 180ms ease, background-color 180ms ease;
+  }
+
+  .site-nav a:hover,
+  .site-nav a:focus-visible {
+    color: var(--brass-light);
+    background: rgb(255 255 255 / 0.06);
+  }
+
+  .site-header__contact {
+    min-width: 9rem;
+    justify-content: space-between;
+    background: var(--green);
+    font-family: var(--font-condensed);
+    letter-spacing: 0.14em;
+  }
+
+  .site-header__contact:hover,
+  .site-header__contact:focus-visible {
+    color: var(--ink);
+    background: var(--brass-light);
+  }
+
+  .site-menu-button,
+  .site-menu {
+    display: none;
+  }
+
+  @media (max-width: 1120px) {
+    .site-nav {
+      display: none;
+    }
+
+    .site-header {
+      grid-template-columns: 1fr auto;
+    }
+
+    .site-header__contact {
+      display: none;
+    }
+
+    .site-menu-button {
+      display: flex;
+      min-width: 6rem;
+      padding: 0 1.25rem;
+      color: white;
+      border: 0;
+      border-left: 1px solid rgb(255 255 255 / 0.18);
+      background: transparent;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+      cursor: pointer;
+    }
+
+    .site-menu-button__label {
+      font-family: var(--font-condensed);
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+    }
+
+    .site-menu-button__lines {
+      position: relative;
+      display: block;
+      width: 1.2rem;
+      height: 0.8rem;
+    }
+
+    .site-menu-button__lines i {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: currentColor;
+      transition: transform 180ms ease, top 180ms ease;
+    }
+
+    .site-menu-button__lines i:first-child { top: 0.18rem; }
+    .site-menu-button__lines i:last-child { top: 0.62rem; }
+    .is-menu-open .site-menu-button__lines i:first-child { top: 0.4rem; transform: rotate(45deg); }
+    .is-menu-open .site-menu-button__lines i:last-child { top: 0.4rem; transform: rotate(-45deg); }
+
+    .site-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      left: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(17rem, 0.38fr);
+      grid-template-rows: 1fr auto;
+      height: calc(100dvh - var(--site-header-height));
+      padding: clamp(1.5rem, 5vw, 5rem) var(--page-pad);
+      color: white;
+      background: var(--ink);
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-0.75rem);
+      transition: opacity 220ms ease, transform 220ms var(--ease-out), visibility 220ms;
+    }
+
+    .site-header.is-menu-open .site-menu {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .site-menu nav {
+      display: grid;
+      align-content: center;
+      max-width: 48rem;
+    }
+
+    .site-menu nav a {
+      display: grid;
+      grid-template-columns: 3rem 1fr;
+      gap: 1rem;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgb(255 255 255 / 0.15);
+      text-decoration: none;
+    }
+
+    .site-menu nav span {
+      color: var(--brass-light);
+      font: 600 0.65rem/1 var(--font-mono);
+    }
+
+    .site-menu nav strong {
+      font-family: var(--font-display);
+      font-size: clamp(1.25rem, 3vw, 2.2rem);
+      font-weight: 500;
+    }
+
+    .site-menu__contact {
+      align-self: end;
+      display: flex;
+      min-height: 5rem;
+      padding: 1rem 1.25rem;
+      color: var(--ink);
+      background: var(--paper);
+      align-items: center;
+      justify-content: space-between;
+      text-decoration: none;
+    }
+
+    .site-menu > p {
+      grid-column: 1 / -1;
+      margin: 2rem 0 0;
+      color: rgb(255 255 255 / 0.42);
+      font-family: var(--font-display);
+      letter-spacing: 0.1em;
+    }
+  }
+
+  @media (max-width: 680px) {
+    .site-brand {
+      padding-left: 1.1rem;
+    }
+
+    .site-brand__name {
+      display: none;
+    }
+
+    .site-menu {
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr auto auto;
+      padding-top: 1rem;
+    }
+
+    .site-menu nav a {
+      padding-block: 0.72rem;
+    }
+
+    .site-menu__contact {
+      margin-top: 1rem;
+    }
+  }
+</style>

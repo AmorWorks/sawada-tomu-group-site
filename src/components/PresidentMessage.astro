@@ -1,0 +1,177 @@
+---
+import { Image } from "astro:assets";
+import presidentPhoto from "../assets/images/president-sawada-tomu.jpg";
+import warmLogo from "../assets/images/stg-warm-logo.jpg";
+---
+
+<section class="message section-shell" id="about" aria-labelledby="message-title">
+  <div class="section-kicker is-light" data-reveal>
+    <span>MESSAGE</span>
+    <span>代表の言葉</span>
+  </div>
+
+  <div class="message-grid">
+    <div class="message-photo" data-reveal>
+      <Image
+        src={presidentPhoto}
+        alt="樹木のそばで微笑む株式会社STG代表取締役 澤田叶夢"
+        widths={[640, 960, 1280]}
+        sizes="(max-width: 840px) 100vw, 46vw"
+        format="webp"
+        loading="lazy"
+      />
+      <div class="message-photo-caption">
+        <span>REPRESENTATIVE DIRECTOR</span>
+        <span>SAWADA TOMU</span>
+      </div>
+    </div>
+
+    <div class="message-copy" data-reveal>
+      <p class="message-label">仕事に、人柄が表れる。</p>
+      <h2 id="message-title">一つひとつの現場に、<br />誠実でありたい。</h2>
+      <div class="message-body">
+        <p>株式会社STGは、伐採・抜根、草刈り、剪定、外構工事など、暮らしの外まわりに関わる仕事に、仲間とともに取り組んでいます。目の前の作業をただ終わらせるのではなく、お客様に「任せてよかった」と思っていただける仕事を積み重ねること。それが私たちの役目です。</p>
+        <p>曲がったことはしない。嘘はつかない。信念を持ち、人への感謝を忘れない。この理念は、飾るための言葉ではありません。技術だけでなく、挨拶、報告、片付け、約束を守る姿勢まで含めて仕事であり、その積み重ねが信頼につながると考えています。</p>
+        <p>お客様、取引先の皆様、共に働く仲間、そして私たちを支えてくださるすべての方への感謝を忘れず、これからも一つひとつのご縁と現場を大切にします。「あなたを笑顔にする会社」として、仲間とともに、どんな夢も叶えていける会社を目指してまいります。</p>
+      </div>
+      <div class="message-signature">
+        <div>
+          <span>株式会社STG</span>
+          <strong>代表取締役　澤田 叶夢</strong>
+        </div>
+        <Image src={warmLogo} alt="STGロゴ" width={112} format="webp" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .message {
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  .message-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(25rem, 1.1fr);
+  }
+
+  .message-photo {
+    position: sticky;
+    top: var(--header-height);
+    align-self: start;
+    height: calc(100svh - var(--header-height));
+    min-height: 46rem;
+    overflow: hidden;
+    background: var(--sand);
+  }
+
+  .message-photo::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 60%, rgb(7 11 10 / 0.5));
+  }
+
+  .message-photo :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .message-photo-caption {
+    position: absolute;
+    z-index: 1;
+    right: var(--page-pad);
+    bottom: var(--page-pad);
+    left: var(--page-pad);
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    color: white;
+    font: 600 0.68rem/1 var(--font-condensed);
+    letter-spacing: 0.14em;
+  }
+
+  .message-copy {
+    padding: clamp(4rem, 9vw, 9rem) clamp(2rem, 7vw, 8rem);
+  }
+
+  .message-label {
+    margin: 0 0 2.5rem;
+    color: var(--brass-dark);
+    font: 600 0.76rem/1.4 var(--font-condensed);
+    letter-spacing: 0.14em;
+  }
+
+  .message-copy h2 {
+    margin: 0;
+    font-size: clamp(2.55rem, 5vw, 6rem);
+    line-height: 1.1;
+    letter-spacing: -0.045em;
+  }
+
+  .message-body {
+    display: grid;
+    gap: 1.6rem;
+    margin-top: clamp(3rem, 7vw, 6rem);
+    color: var(--ink-soft);
+    line-height: 2.15;
+  }
+
+  .message-body p {
+    margin: 0;
+  }
+
+  .message-signature {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-top: 3.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line-light);
+  }
+
+  .message-signature div {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .message-signature span {
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+  }
+
+  .message-signature strong {
+    font-size: 1rem;
+    letter-spacing: 0.06em;
+  }
+
+  .message-signature :global(img) {
+    width: 5.5rem;
+    mix-blend-mode: multiply;
+  }
+
+  @media (max-width: 840px) {
+    .message-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .message-photo {
+      position: relative;
+      top: auto;
+      height: auto;
+      min-height: 0;
+      aspect-ratio: 4 / 3;
+    }
+
+    .message-copy {
+      padding: 4rem var(--page-pad) 5rem;
+    }
+
+    .message-signature {
+      align-items: center;
+    }
+  }
+</style>

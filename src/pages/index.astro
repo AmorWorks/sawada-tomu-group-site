@@ -1,0 +1,27 @@
+---
+import teamImage from "../assets/images/hero-stg-team.jpg";
+import ContactSection from "../components/ContactSection.astro";
+import HeroStory from "../components/HeroStory.astro";
+import HomeTrustSections from "../components/HomeTrustSections.astro";
+import PhilosophyStatement from "../components/PhilosophyStatement.astro";
+import PresidentMessage from "../components/PresidentMessage.astro";
+import WorkApproach from "../components/WorkApproach.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "株式会社STG｜あなたを笑顔にする会社";
+const description = "伐採・抜根、草刈り・年間管理、剪定、外構工事、足場仮設、防草シート施工。株式会社STGは現場と人に誠実に向き合います。";
+---
+
+<BaseLayout title={title} description={description} ogImage={teamImage.src}>
+  <HeroStory contactHref="#contact" servicesHref="#services" skipTargetId="after-hero" />
+
+  <HomeTrustSections>
+    <WorkApproach slot="after-services" />
+    <Fragment slot="before-faq">
+      <PhilosophyStatement />
+      <PresidentMessage />
+    </Fragment>
+  </HomeTrustSections>
+
+  <ContactSection />
+</BaseLayout>

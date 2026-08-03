@@ -1,0 +1,58 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const home = import.meta.env.BASE_URL;
+---
+
+<BaseLayout
+  title="ページが見つかりません｜株式会社STG"
+  description="お探しのページは見つかりませんでした。"
+  robots="noindex,follow"
+>
+  <section class="not-found">
+    <p>404 / NOT FOUND</p>
+    <h1>お探しのページは<br />見つかりませんでした。</h1>
+    <a href={home}>トップページへ戻る <span aria-hidden="true">→</span></a>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    display: grid;
+    min-height: 78svh;
+    padding: calc(var(--site-header-height) + 5rem) var(--page-pad) 6rem;
+    color: white;
+    background: var(--green);
+    align-content: center;
+  }
+
+  .not-found > p {
+    margin: 0 0 2rem;
+    color: var(--brass-light);
+    font: 700 0.7rem/1 var(--font-mono);
+    letter-spacing: 0.16em;
+  }
+
+  .not-found h1 {
+    max-width: 12em;
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 7vw, 7rem);
+    font-weight: 500;
+    line-height: 1.18;
+    letter-spacing: -0.055em;
+  }
+
+  .not-found a {
+    display: flex;
+    width: min(100%, 22rem);
+    min-height: 4rem;
+    margin-top: 3rem;
+    padding: 0.8rem 1.2rem;
+    color: var(--ink);
+    background: var(--paper);
+    align-items: center;
+    justify-content: space-between;
+    text-decoration: none;
+  }
+</style>
