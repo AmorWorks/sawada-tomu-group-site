@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://amorworks.github.io/sawada-tomu-group-site/sitemap-index.xml
+Sitemap: https://amorworks.github.io/sawada-tomu-group-site/sitemap.xml

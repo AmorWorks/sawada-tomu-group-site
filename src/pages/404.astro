@@ -1,13 +1,16 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const home = import.meta.env.BASE_URL;
+const home = import.meta.env.BASE_URL === "/"
+  ? "/"
+  : `${import.meta.env.BASE_URL.replace(/\/+$/, "")}/`;
 ---
 
 <BaseLayout
   title="ページが見つかりません｜株式会社STG"
   description="お探しのページは見つかりませんでした。"
   robots="noindex,follow"
+  canonicalPath={home}
 >
   <section class="not-found">
     <p>404 / NOT FOUND</p>

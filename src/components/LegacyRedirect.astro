@@ -1,0 +1,90 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+interface Props {
+  pageName: string;
+  targetAnchor: "services" | "work" | "about" | "contact";
+  targetLabel: string;
+}
+
+const { pageName, targetAnchor, targetLabel } = Astro.props;
+const basePath = import.meta.env.BASE_URL === "/"
+  ? "/"
+  : `${import.meta.env.BASE_URL.replace(/\/+$/, "")}/`;
+const targetHref = `${basePath}#${targetAnchor}`;
+---
+
+<BaseLayout
+  title={`${pageName}の移動案内｜株式会社STG`}
+  description={`${pageName}は株式会社STGトップページ内へ移動しました。`}
+  robots="noindex,follow"
+  canonicalPath={basePath}
+  redirectTo={targetHref}
+>
+  <section class="legacy-redirect" aria-labelledby="legacy-redirect-title">
+    <p class="legacy-redirect__eyebrow">PAGE MOVED</p>
+    <h1 id="legacy-redirect-title">
+      {pageName}は、<br />トップページ内へ移動しました。
+    </h1>
+    <p class="legacy-redirect__body">
+      自動的に移動しない場合は、下のリンクからお進みください。
+    </p>
+    <a class="legacy-redirect__link" href={targetHref}>
+      <span>{targetLabel}</span>
+      <span aria-hidden="true">→</span>
+    </a>
+  </section>
+</BaseLayout>
+
+<style>
+  .legacy-redirect {
+    display: grid;
+    min-height: 78svh;
+    padding: calc(var(--site-header-height) + 5rem) var(--page-pad) 6rem;
+    color: white;
+    background: var(--green);
+    align-content: center;
+  }
+
+  .legacy-redirect__eyebrow {
+    margin: 0 0 2rem;
+    color: var(--brass-light);
+    font: 700 0.7rem/1 var(--font-mono);
+    letter-spacing: 0.16em;
+  }
+
+  .legacy-redirect h1 {
+    max-width: 13em;
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 7vw, 6.5rem);
+    font-weight: 500;
+    line-height: 1.18;
+    letter-spacing: -0.055em;
+  }
+
+  .legacy-redirect__body {
+    max-width: 40rem;
+    margin: 2rem 0 0;
+    color: rgb(255 255 255 / 72%);
+    line-height: 1.9;
+  }
+
+  .legacy-redirect__link {
+    display: flex;
+    width: min(100%, 24rem);
+    min-height: 4rem;
+    margin-top: 2rem;
+    padding: 0.8rem 1.2rem;
+    color: var(--ink);
+    background: var(--paper);
+    align-items: center;
+    justify-content: space-between;
+    text-decoration: none;
+  }
+
+  .legacy-redirect__link:focus-visible {
+    outline: 3px solid var(--brass-light);
+    outline-offset: 4px;
+  }
+</style>

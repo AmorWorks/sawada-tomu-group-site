@@ -1,0 +1,258 @@
+---
+import { services } from "../data/site";
+---
+
+<section class="service-field section-shell" id="services" aria-labelledby="services-title">
+  <div class="section-kicker">
+    <span>02 / FIELD INDEX</span>
+    <span>業務内容</span>
+  </div>
+
+  <div class="service-field__head">
+    <div>
+      <p class="eyebrow">WHAT WE DO</p>
+      <h2 id="services-title">STGの仕事。</h2>
+    </div>
+    <p>
+      樹木、緑地、建物の外まわり。<br />
+      現場の状態とご希望を確認し、必要な仕事を整理します。
+    </p>
+  </div>
+
+  <div class="service-field__body">
+    <p class="service-field__count" aria-hidden="true">06</p>
+    <div class="service-field__list">
+      {services.map((service) => (
+        <article>
+          <span class="service-field__number">{service.number}</span>
+          <p class="service-field__field">{service.field}</p>
+          <h3>{service.title}</h3>
+          <p class="service-field__description">{service.description}</p>
+          <span class="service-field__arrow" aria-hidden="true">↘</span>
+        </article>
+      ))}
+    </div>
+  </div>
+
+  <div class="service-field__next">
+    <p>仕事の範囲だけでなく、進め方まで。</p>
+    <a class="action-link" href="#work">仕事の進め方を見る <span aria-hidden="true">↓</span></a>
+  </div>
+</section>
+
+<style>
+  .service-field {
+    overflow: hidden;
+    color: var(--ink);
+    background: var(--paper);
+  }
+
+  .service-field__head {
+    display: grid;
+    grid-template-columns: minmax(18rem, 1.2fr) minmax(18rem, 0.7fr);
+    gap: clamp(3rem, 8vw, 10rem);
+    align-items: end;
+    padding: clamp(4rem, 9vw, 8.5rem) var(--page-pad) clamp(3rem, 7vw, 6rem);
+  }
+
+  .service-field__head h2 {
+    margin: 1.5rem 0 0;
+    font-family: var(--font-display);
+    font-size: clamp(4.5rem, 10vw, 11rem);
+    font-weight: 500;
+    line-height: 0.9;
+    letter-spacing: -0.075em;
+  }
+
+  .service-field__head > p {
+    margin: 0;
+    color: var(--ink-soft);
+    line-height: 2;
+  }
+
+  .service-field__body {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(13rem, 0.35fr) minmax(0, 1fr);
+    border-top: 1px solid var(--line-dark);
+    border-bottom: 1px solid var(--line-dark);
+  }
+
+  .service-field__count {
+    position: sticky;
+    top: calc(var(--site-header-height) + 2rem);
+    align-self: start;
+    margin: 0;
+    padding: clamp(2rem, 4vw, 4rem) var(--page-pad);
+    color: var(--green);
+    font: 700 clamp(7rem, 19vw, 19rem)/0.72 var(--font-condensed);
+    letter-spacing: -0.1em;
+  }
+
+  .service-field__list {
+    border-left: 1px solid var(--line-dark);
+  }
+
+  .service-field__list article {
+    position: relative;
+    display: grid;
+    grid-template-columns: 3rem minmax(5rem, 0.3fr) minmax(14rem, 0.55fr) minmax(18rem, 1fr) 2rem;
+    gap: clamp(0.75rem, 2vw, 2rem);
+    align-items: center;
+    min-height: 8.5rem;
+    padding: 1.5rem var(--page-pad) 1.5rem clamp(1.25rem, 3vw, 3rem);
+    border-bottom: 1px solid var(--line-dark);
+    isolation: isolate;
+  }
+
+  .service-field__list article:last-child {
+    border-bottom: 0;
+  }
+
+  .service-field__list article::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background: var(--green);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 520ms var(--ease-out);
+  }
+
+  .service-field__list article:hover::before {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .service-field__list article:hover {
+    color: white;
+  }
+
+  .service-field__number,
+  .service-field__field {
+    color: var(--brass-dark);
+    font: 700 0.65rem/1 var(--font-mono);
+    letter-spacing: 0.12em;
+  }
+
+  .service-field__field {
+    margin: 0;
+    font-family: var(--font-condensed);
+  }
+
+  .service-field__list article:hover .service-field__number,
+  .service-field__list article:hover .service-field__field {
+    color: var(--brass-light);
+  }
+
+  .service-field__list h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.55rem, 2.7vw, 3rem);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+  }
+
+  .service-field__description {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 0.86rem;
+    line-height: 1.8;
+  }
+
+  .service-field__list article:hover .service-field__description {
+    color: rgb(255 255 255 / 0.7);
+  }
+
+  .service-field__arrow {
+    justify-self: end;
+    font-size: 1rem;
+  }
+
+  .service-field__next {
+    display: flex;
+    min-height: 9rem;
+    padding: 2rem var(--page-pad);
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .service-field__next p {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 2vw, 2rem);
+  }
+
+  @media (max-width: 900px) {
+    .service-field__head,
+    .service-field__body {
+      grid-template-columns: 1fr;
+    }
+
+    .service-field__head {
+      gap: 2rem;
+    }
+
+    .service-field__head h2 {
+      font-size: clamp(4rem, 17vw, 7rem);
+    }
+
+    .service-field__count {
+      position: absolute;
+      top: 1.25rem;
+      right: var(--page-pad);
+      padding: 0;
+      color: rgb(21 59 40 / 0.12);
+      font-size: 8rem;
+      pointer-events: none;
+    }
+
+    .service-field__list {
+      border-left: 0;
+    }
+
+    .service-field__list article {
+      grid-template-columns: 2.2rem 1fr auto;
+      min-height: 0;
+      padding: 1.5rem var(--page-pad);
+    }
+
+    .service-field__field {
+      display: none;
+    }
+
+    .service-field__description {
+      grid-column: 2 / -1;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .service-field__head > p br {
+      display: none;
+    }
+
+    .service-field__list article::before {
+      display: none;
+    }
+
+    .service-field__list article:hover {
+      color: inherit;
+    }
+
+    .service-field__list article:hover .service-field__number {
+      color: var(--brass-dark);
+    }
+
+    .service-field__list article:hover .service-field__description {
+      color: var(--ink-soft);
+    }
+
+    .service-field__next {
+      display: grid;
+      min-height: 0;
+      padding-block: 2.5rem;
+    }
+  }
+</style>

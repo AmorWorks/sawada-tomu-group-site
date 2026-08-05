@@ -8,27 +8,41 @@ interface Props {
   description: string;
   ogImage?: string;
   robots?: string;
+  canonicalPath?: string;
+  redirectTo?: string;
 }
 
 const {
   title,
   description,
   ogImage,
-  robots = "index,follow,max-image-preview:large"
+  robots = "index,follow,max-image-preview:large",
+  canonicalPath,
+  redirectTo
 } = Astro.props;
 
-const canonicalPath = Astro.url.pathname.endsWith("/index.html")
-  ? Astro.url.pathname.slice(0, -"index.html".length)
-  : Astro.url.pathname;
-const canonical = new URL(canonicalPath, Astro.site);
-const imageUrl = ogImage ? new URL(ogImage, Astro.site) : undefined;
-const favicon = `${import.meta.env.BASE_URL}favicon.svg`;
+const siteBase = Astro.site ?? Astro.url;
+const basePath = import.meta.env.BASE_URL === "/"
+  ? "/"
+  : `${import.meta.env.BASE_URL.replace(/\/+$/, "")}/`;
+const canonical = new URL(canonicalPath ?? Astro.url.pathname, siteBase);
+const canonicalWithoutIndex = canonical.pathname.replace(/\/index\.html$/, "/");
+
+canonical.pathname = canonicalWithoutIndex.endsWith("/")
+  ? canonicalWithoutIndex
+  : `${canonicalWithoutIndex}/`;
+canonical.search = "";
+canonical.hash = "";
+
+const imageUrl = ogImage ? new URL(ogImage, siteBase) : undefined;
+const favicon = `${basePath}favicon.svg`;
+const organizationUrl = new URL(basePath, siteBase);
 const organization = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "株式会社STG",
   alternateName: "SAWADA TOMU GROUP",
-  url: canonical.origin + import.meta.env.BASE_URL,
+  url: organizationUrl.href,
   slogan: "あなたを笑顔にする会社"
 };
 ---
@@ -42,6 +56,7 @@ const organization = {
     <meta name="description" content={description} />
     <meta name="robots" content={robots} />
     <meta name="generator" content={Astro.generator} />
+    {redirectTo && <meta http-equiv="refresh" content={`0; url=${redirectTo}`} />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" href={favicon} type="image/svg+xml" />
     <meta property="og:type" content="website" />
@@ -62,6 +77,6 @@ const organization = {
       <slot />
     </main>
     <SiteFooter />
-    <script src="../scripts/reveal.ts"></script>
+    <script src="../scripts/experience.ts"></script>
   </body>
 </html>

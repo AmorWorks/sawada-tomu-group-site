@@ -2,55 +2,47 @@
 const home = import.meta.env.BASE_URL;
 
 const navItems = [
-  { label: "信頼の理由", href: `${home}#trust` },
-  { label: "業務内容", href: `${home}#services` },
-  { label: "仕事の姿勢", href: `${home}#work` },
-  { label: "ご相談の流れ", href: `${home}#process` },
-  { label: "私たちについて", href: `${home}#about` },
-  { label: "よくある質問", href: `${home}#faq` }
+  { label: "WORK", href: `${home}#services` },
+  { label: "ABOUT", href: `${home}#about` },
+  { label: "FAQ", href: `${home}#faq` },
+  { label: "CONTACT", href: `${home}#contact`, accent: true }
 ];
 ---
 
 <header class="site-header" data-site-header>
-  <a class="site-brand" href={home} aria-label="株式会社STG ホーム">
-    <span class="site-brand__mark">STG</span>
-    <span class="site-brand__name">
-      <strong>SAWADA TOMU GROUP</strong>
-      <small>株式会社STG</small>
-    </span>
+  <a class="site-brand" href={`${home}#top`} aria-label="株式会社STG ページ上部へ">
+    <span class="site-brand__mark" aria-hidden="true">STG</span>
+    <span class="site-brand__name">株式会社STG</span>
   </a>
 
   <nav class="site-nav" aria-label="メインナビゲーション">
-    {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+    {navItems.map((item) => (
+      <a class:list={{ "is-contact": item.accent }} href={item.href}>{item.label}</a>
+    ))}
   </nav>
-
-  <a class="site-header__contact" href={`${home}#contact`}>
-    <span>CONTACT</span>
-    <span aria-hidden="true">↘</span>
-  </a>
 
   <button
     class="site-menu-button"
     type="button"
     aria-expanded="false"
     aria-controls="site-menu"
+    aria-label="メニューを開く"
     data-menu-button
   >
-    <span class="site-menu-button__label">MENU</span>
-    <span class="site-menu-button__lines" aria-hidden="true"><i></i><i></i></span>
+    <span>MENU</span>
+    <span class="site-menu-button__icon" aria-hidden="true"><i></i><i></i></span>
   </button>
 
-  <div class="site-menu" id="site-menu" data-site-menu aria-hidden="true">
+  <div class="site-menu" id="site-menu" data-site-menu aria-hidden="true" hidden>
     <nav aria-label="スマートフォンメニュー">
       {navItems.map((item, index) => (
         <a href={item.href}>
-          <span>0{index + 1}</span>
+          <span aria-hidden="true">0{index + 1}</span>
           <strong>{item.label}</strong>
         </a>
       ))}
     </nav>
-    <a class="site-menu__contact" href={`${home}#contact`}>現場のことを相談する <span aria-hidden="true">→</span></a>
-    <p>あなたを笑顔にする会社</p>
+    <p><span>SAWADA TOMU GROUP</span><strong>株式会社STG</strong></p>
   </div>
 </header>
 
@@ -62,24 +54,58 @@ const navItems = [
 
     const button = header.querySelector<HTMLButtonElement>("[data-menu-button]");
     const menu = header.querySelector<HTMLElement>("[data-site-menu]");
+    const menuLinks = Array.from(menu?.querySelectorAll<HTMLAnchorElement>("a") ?? []);
 
-    const setOpen = (open: boolean) => {
-      button?.setAttribute("aria-expanded", String(open));
-      menu?.setAttribute("aria-hidden", String(!open));
+    if (!button || !menu) return;
+
+    const setOpen = (open: boolean, restoreFocus = false) => {
+      button.setAttribute("aria-expanded", String(open));
+      button.setAttribute("aria-label", open ? "メニューを閉じる" : "メニューを開く");
+      menu.setAttribute("aria-hidden", String(!open));
+      menu.hidden = !open;
       header.classList.toggle("is-menu-open", open);
       document.body.classList.toggle("is-menu-open", open);
+
+      if (open) {
+        menuLinks[0]?.focus();
+      } else if (restoreFocus) {
+        button.focus();
+      }
     };
 
-    button?.addEventListener("click", () => {
+    button.addEventListener("click", () => {
       setOpen(button.getAttribute("aria-expanded") !== "true");
     });
 
-    menu?.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => setOpen(false)));
+    menuLinks.forEach((link) => link.addEventListener("click", () => setOpen(false, true)));
+
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key === "Escape" && button.getAttribute("aria-expanded") === "true") {
+        setOpen(false, true);
+      }
+
+      if (event.key === "Tab" && button.getAttribute("aria-expanded") === "true") {
+        const focusable = [button, ...menuLinks];
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
+      }
     });
 
-    const updateHeader = () => header.classList.toggle("is-scrolled", window.scrollY > 24);
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 860 && button.getAttribute("aria-expanded") === "true") {
+        setOpen(false);
+      }
+    });
+
+    const updateHeader = () => header.classList.toggle("is-scrolled", window.scrollY > 20);
     window.addEventListener("scroll", updateHeader, { passive: true });
     updateHeader();
   };
@@ -94,95 +120,86 @@ const navItems = [
     inset: 0 0 auto;
     z-index: 100;
     display: grid;
-    grid-template-columns: auto 1fr auto;
-    height: var(--site-header-height);
-    color: white;
-    border-bottom: 1px solid rgb(255 255 255 / 0.18);
-    background: linear-gradient(180deg, rgb(0 0 0 / 0.46), transparent);
-    transition: background-color 240ms ease, border-color 240ms ease;
+    grid-template-columns: minmax(12rem, 1fr) auto;
+    height: var(--header-height);
+    color: var(--paper);
+    border-bottom: 1px solid var(--line-light);
+    background: linear-gradient(180deg, rgb(7 12 9 / 0.7), rgb(7 12 9 / 0));
+    transition: background-color 180ms ease, border-color 180ms ease;
+  }
+
+  :global(body.is-menu-open) {
+    overflow: hidden;
   }
 
   .site-header.is-scrolled,
   .site-header.is-menu-open {
-    border-color: rgb(255 255 255 / 0.1);
-    background: rgb(13 21 16 / 0.94);
-    backdrop-filter: blur(16px);
+    border-color: rgb(255 255 255 / 0.14);
+    background: rgb(13 20 16 / 0.96);
   }
 
   .site-brand {
     display: flex;
+    min-width: 0;
     align-items: center;
-    gap: 0.85rem;
+    gap: 0.9rem;
     padding-inline: var(--page-pad) 1.5rem;
-    color: white;
+    color: inherit;
     text-decoration: none;
   }
 
   .site-brand__mark {
-    font-family: var(--font-condensed);
-    font-size: 1.55rem;
+    font-family: var(--font-condensed, "Arial Narrow", Arial, sans-serif);
+    font-size: 1.3rem;
     font-weight: 800;
-    letter-spacing: -0.07em;
+    letter-spacing: -0.06em;
+    line-height: 1;
   }
 
   .site-brand__name {
-    display: grid;
-    padding-left: 0.8rem;
-    border-left: 1px solid rgb(255 255 255 / 0.28);
-    line-height: 1.1;
-  }
-
-  .site-brand__name strong {
-    font-family: var(--font-condensed);
-    font-size: 0.56rem;
-    letter-spacing: 0.14em;
-  }
-
-  .site-brand__name small {
-    margin-top: 0.28rem;
-    color: rgb(255 255 255 / 0.64);
-    font-size: 0.57rem;
-    letter-spacing: 0.05em;
+    padding-left: 0.9rem;
+    border-left: 1px solid var(--line-light);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    white-space: nowrap;
   }
 
   .site-nav {
     display: flex;
     align-items: stretch;
-    justify-content: flex-end;
   }
 
-  .site-nav a,
-  .site-header__contact {
+  .site-nav a {
     display: flex;
+    min-width: clamp(5rem, 7vw, 7.5rem);
+    min-height: 44px;
     align-items: center;
-    padding-inline: clamp(0.6rem, 1.1vw, 1.25rem);
+    justify-content: center;
+    padding-inline: 1rem;
     color: inherit;
-    border-left: 1px solid rgb(255 255 255 / 0.14);
-    font-size: clamp(0.62rem, 0.7vw, 0.72rem);
-    font-weight: 700;
-    letter-spacing: 0.04em;
+    border-left: 1px solid var(--line-light);
+    font: 700 0.66rem/1 var(--font-condensed, "Arial Narrow", Arial, sans-serif);
+    letter-spacing: 0.16em;
     text-decoration: none;
-    transition: color 180ms ease, background-color 180ms ease;
+    transition: color 160ms ease, background-color 160ms ease;
   }
 
   .site-nav a:hover,
   .site-nav a:focus-visible {
-    color: var(--brass-light);
-    background: rgb(255 255 255 / 0.06);
-  }
-
-  .site-header__contact {
-    min-width: 9rem;
-    justify-content: space-between;
-    background: var(--green);
-    font-family: var(--font-condensed);
-    letter-spacing: 0.14em;
-  }
-
-  .site-header__contact:hover,
-  .site-header__contact:focus-visible {
     color: var(--ink);
-    background: var(--brass-light);
+    background: var(--paper);
+  }
+
+  .site-nav a.is-contact {
+    color: var(--ink);
+    background: var(--brass);
+  }
+
+  .site-nav a.is-contact:hover,
+  .site-nav a.is-contact:focus-visible {
+    background: var(--paper);
   }
 
   .site-menu-button,
@@ -190,156 +207,134 @@ const navItems = [
     display: none;
   }
 
-  @media (max-width: 1120px) {
-    .site-nav {
-      display: none;
-    }
+  .site-menu[hidden] {
+    display: none;
+  }
 
+  @media (max-width: 860px) {
     .site-header {
       grid-template-columns: 1fr auto;
     }
 
-    .site-header__contact {
+    .site-nav {
       display: none;
     }
 
     .site-menu-button {
       display: flex;
-      min-width: 6rem;
-      padding: 0 1.25rem;
-      color: white;
-      border: 0;
-      border-left: 1px solid rgb(255 255 255 / 0.18);
-      background: transparent;
+      min-width: 6.5rem;
+      min-height: 44px;
       align-items: center;
       justify-content: space-between;
       gap: 0.8rem;
+      padding: 0 1.15rem;
+      color: inherit;
+      border: 0;
+      border-left: 1px solid var(--line-light);
+      background: transparent;
       cursor: pointer;
-    }
-
-    .site-menu-button__label {
-      font-family: var(--font-condensed);
-      font-size: 0.62rem;
-      font-weight: 700;
+      font: 700 0.64rem/1 var(--font-condensed, "Arial Narrow", Arial, sans-serif);
       letter-spacing: 0.14em;
     }
 
-    .site-menu-button__lines {
+    .site-menu-button__icon {
       position: relative;
-      display: block;
-      width: 1.2rem;
+      width: 1.15rem;
       height: 0.8rem;
     }
 
-    .site-menu-button__lines i {
+    .site-menu-button__icon i {
       position: absolute;
       left: 0;
       width: 100%;
       height: 1px;
       background: currentColor;
-      transition: transform 180ms ease, top 180ms ease;
+      transition: top 160ms ease, transform 160ms ease;
     }
 
-    .site-menu-button__lines i:first-child { top: 0.18rem; }
-    .site-menu-button__lines i:last-child { top: 0.62rem; }
-    .is-menu-open .site-menu-button__lines i:first-child { top: 0.4rem; transform: rotate(45deg); }
-    .is-menu-open .site-menu-button__lines i:last-child { top: 0.4rem; transform: rotate(-45deg); }
+    .site-menu-button__icon i:first-child { top: 0.2rem; }
+    .site-menu-button__icon i:last-child { top: 0.62rem; }
+    .is-menu-open .site-menu-button__icon i:first-child { top: 0.4rem; transform: rotate(45deg); }
+    .is-menu-open .site-menu-button__icon i:last-child { top: 0.4rem; transform: rotate(-45deg); }
 
     .site-menu {
-      position: absolute;
-      top: 100%;
-      right: 0;
-      left: 0;
+      position: fixed;
+      inset: var(--header-height) 0 0;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(17rem, 0.38fr);
       grid-template-rows: 1fr auto;
-      height: calc(100dvh - var(--site-header-height));
-      padding: clamp(1.5rem, 5vw, 5rem) var(--page-pad);
-      color: white;
+      padding: clamp(1.5rem, 6vw, 3rem) var(--page-pad) 1.5rem;
+      color: var(--paper);
       background: var(--ink);
-      visibility: hidden;
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(-0.75rem);
-      transition: opacity 220ms ease, transform 220ms var(--ease-out), visibility 220ms;
-    }
-
-    .site-header.is-menu-open .site-menu {
-      visibility: visible;
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateY(0);
+      overflow-y: auto;
     }
 
     .site-menu nav {
       display: grid;
       align-content: center;
-      max-width: 48rem;
+      width: min(100%, 42rem);
+      margin-inline: auto;
+      border-top: 1px solid var(--line-light);
     }
 
     .site-menu nav a {
       display: grid;
-      grid-template-columns: 3rem 1fr;
-      gap: 1rem;
+      grid-template-columns: 2.5rem 1fr;
       align-items: center;
-      padding: 1rem 0;
-      border-bottom: 1px solid rgb(255 255 255 / 0.15);
+      min-height: 4.4rem;
+      color: inherit;
+      border-bottom: 1px solid var(--line-light);
       text-decoration: none;
     }
 
-    .site-menu nav span {
-      color: var(--brass-light);
-      font: 600 0.65rem/1 var(--font-mono);
+    .site-menu nav a > span {
+      color: var(--brass);
+      font: 600 0.62rem/1 var(--font-mono, Consolas, monospace);
     }
 
     .site-menu nav strong {
-      font-family: var(--font-display);
-      font-size: clamp(1.25rem, 3vw, 2.2rem);
-      font-weight: 500;
-    }
-
-    .site-menu__contact {
-      align-self: end;
-      display: flex;
-      min-height: 5rem;
-      padding: 1rem 1.25rem;
-      color: var(--ink);
-      background: var(--paper);
-      align-items: center;
-      justify-content: space-between;
-      text-decoration: none;
+      font: 600 clamp(1.4rem, 6vw, 2.3rem)/1 var(--font-condensed, "Arial Narrow", Arial, sans-serif);
+      letter-spacing: 0.08em;
     }
 
     .site-menu > p {
-      grid-column: 1 / -1;
-      margin: 2rem 0 0;
-      color: rgb(255 255 255 / 0.42);
-      font-family: var(--font-display);
-      letter-spacing: 0.1em;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin: 1.5rem 0 0;
+      padding-top: 1rem;
+      color: rgb(255 255 255 / 0.5);
+      border-top: 1px solid var(--line-light);
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+    }
+
+    .site-menu > p span,
+    .site-menu > p strong {
+      font: inherit;
     }
   }
 
-  @media (max-width: 680px) {
+  @media (max-width: 520px) {
     .site-brand {
-      padding-left: 1.1rem;
+      gap: 0.7rem;
+      padding-left: var(--page-pad);
     }
 
     .site-brand__name {
-      display: none;
+      padding-left: 0.7rem;
+      font-size: 0.64rem;
     }
 
-    .site-menu {
-      grid-template-columns: 1fr;
-      grid-template-rows: 1fr auto auto;
-      padding-top: 1rem;
+    .site-menu-button {
+      min-width: 5.7rem;
     }
+  }
 
-    .site-menu nav a {
-      padding-block: 0.72rem;
-    }
-
-    .site-menu__contact {
-      margin-top: 1rem;
+  @media (prefers-reduced-motion: reduce) {
+    .site-header,
+    .site-nav a,
+    .site-menu-button__icon i {
+      transition: none;
     }
   }
 </style>

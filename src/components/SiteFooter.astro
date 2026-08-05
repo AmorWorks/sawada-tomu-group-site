@@ -4,114 +4,73 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
-  <div class="site-footer__lead">
-    <p>SAWADA TOMU GROUP</p>
-    <h2>どんな夢も<br />叶えていく。</h2>
-  </div>
-
-  <div class="site-footer__nav">
-    <a href={`${home}#services`}>業務内容</a>
-    <a href={`${home}#process`}>ご相談の流れ</a>
-    <a href={`${home}#about`}>私たちについて</a>
-    <a href={`${home}#faq`}>よくある質問</a>
-    <a href={`${home}#contact`}>お問い合わせ</a>
-  </div>
-
-  <div class="site-footer__base">
-    <a href={home} class="site-footer__brand" aria-label="ページ上部へ">STG</a>
-    <p>株式会社STG</p>
-    <small>© {year} STG. ALL RIGHTS RESERVED.</small>
-    <a href="#main-content">BACK TO TOP ↑</a>
-  </div>
+  <p class="site-footer__brand">株式会社STG</p>
+  <small>© {year} STG</small>
+  <a href={`${home}#top`}>BACK TO TOP <span aria-hidden="true">↑</span></a>
 </footer>
 
 <style>
   .site-footer {
-    color: white;
-    background: #0c110e;
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: clamp(1rem, 4vw, 3rem);
+    min-height: 4.5rem;
+    padding: 1rem var(--page-pad);
+    color: rgb(255 255 255 / 0.56);
+    border-top: 1px solid var(--line-light);
+    background: var(--ink);
+    font: 600 0.62rem/1.4 var(--font-condensed, "Arial Narrow", Arial, sans-serif);
+    letter-spacing: 0.1em;
   }
 
-  .site-footer__lead {
-    padding: clamp(4rem, 10vw, 9rem) var(--page-pad);
-    border-bottom: 1px solid var(--line-light);
-  }
-
-  .site-footer__lead p {
-    margin: 0 0 2rem;
-    color: var(--brass-light);
-    font: 700 0.7rem/1 var(--font-condensed);
-    letter-spacing: 0.18em;
-  }
-
-  .site-footer__lead h2 {
+  .site-footer__brand,
+  .site-footer small {
     margin: 0;
-    font-family: var(--font-display);
-    font-size: clamp(3.5rem, 10vw, 10rem);
-    font-weight: 500;
-    line-height: 0.98;
-    letter-spacing: -0.06em;
-  }
-
-  .site-footer__nav {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    border-bottom: 1px solid var(--line-light);
-  }
-
-  .site-footer__nav a {
-    display: flex;
-    min-height: 6rem;
-    padding: 1rem;
-    border-right: 1px solid var(--line-light);
-    align-items: center;
-    justify-content: center;
-    font-size: 0.76rem;
-    text-decoration: none;
-    transition: color 180ms ease, background-color 180ms ease;
-  }
-
-  .site-footer__nav a:last-child { border-right: 0; }
-  .site-footer__nav a:hover,
-  .site-footer__nav a:focus-visible { color: var(--ink); background: var(--brass-light); }
-
-  .site-footer__base {
-    display: grid;
-    grid-template-columns: auto 1fr auto auto;
-    gap: 1.5rem;
-    align-items: center;
-    padding: 1.5rem var(--page-pad);
+    font: inherit;
   }
 
   .site-footer__brand {
-    font-family: var(--font-condensed);
-    font-size: 1.8rem;
-    font-weight: 800;
-    letter-spacing: -0.08em;
-    text-decoration: none;
-  }
-
-  .site-footer__base p,
-  .site-footer__base small,
-  .site-footer__base > a:last-child {
-    margin: 0;
-    color: rgb(255 255 255 / 0.52);
-    font-size: 0.65rem;
+    color: var(--paper);
     letter-spacing: 0.08em;
-    text-decoration: none;
   }
 
-  @media (max-width: 760px) {
-    .site-footer__nav { grid-template-columns: 1fr; }
-    .site-footer__nav a {
-      min-height: 4rem;
-      justify-content: flex-start;
-      padding-inline: var(--page-pad);
-      border-right: 0;
-      border-bottom: 1px solid var(--line-light);
+  .site-footer a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: inherit;
+    text-decoration: none;
+    transition: color 160ms ease;
+  }
+
+  .site-footer a:hover,
+  .site-footer a:focus-visible {
+    color: var(--paper);
+  }
+
+  @media (max-width: 560px) {
+    .site-footer {
+      grid-template-columns: 1fr auto;
+      gap: 0.5rem 1rem;
+      padding-block: 1.15rem;
     }
-    .site-footer__nav a:last-child { border-bottom: 0; }
-    .site-footer__base { grid-template-columns: auto 1fr; }
-    .site-footer__base small { grid-column: 1 / -1; }
-    .site-footer__base > a:last-child { grid-column: 1 / -1; }
+
+    .site-footer small {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+
+    .site-footer a {
+      grid-column: 2;
+      grid-row: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-footer a {
+      transition: none;
+    }
   }
 </style>
