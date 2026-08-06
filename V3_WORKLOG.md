@@ -5,8 +5,9 @@
 - ベース: `feature/stg-v2-redesign` の確定コミット `19316cc`
 - V3ブランチ: `feature/stg-v3-experience`
 - V3作業場所: `ホームページ/01-制作/site-v3-preview`
-- 公開中main、V2プレビュー、GitHub Pagesには触れない。
-- 2026-08-05の承認により、V3ブランチへのcommit・pushのみ行う。deployとmain変更は含めない。
+- V3ソースはV2プレビューと分離し、`feature/stg-v3-experience`で管理する。
+- 2026-08-07の承認により、現行V3の代表挨拶・写真を含む本番公開を行う。
+- 本番`main`にはソースや内部資料を含めず、検査済みbuild成果物だけを配置する。
 
 ## 参照した声の資料
 
@@ -30,19 +31,18 @@
 - V2のfaviconパスは`BASE_URL`連結でスラッシュが欠ける。
 - Astro公開と旧root静的サイトの境界、旧ページURL維持、GitHub Pagesのbuild公開方式は公開前に別途整備が必要。
 
-## 確認待ち
+## 公開承認と継続確認
 
-- 代表挨拶本文と代表写真の本人確認・掲載許可
-- 作業写真、集合写真、ロゴのWeb掲載許可
-- InstagramプロフィールURLとDM運用
-- 住所、電話、LINE、メール、営業時間、対応地域、求人条件
-- 旧ページURLの移行方針とGitHub Pagesの公開方式
+- 代表挨拶本文、代表写真、作業写真、集合写真は2026-08-07の現行V3公開承認に含む。
+- InstagramプロフィールURLとDM運用は、公開直前と公開後に遷移確認する。
+- 住所、電話、LINE、メール、営業時間、対応地域、求人条件は確認が取れるまで掲載しない。
+- 旧ページURLは互換ページで移動し、GitHub Pagesはbuild成果物だけを`main`直下へ配置する。
 
 ## 次にやること
 
-1. ユーザーがV3ブランチとローカルプレビューを確認する。
-2. 代表挨拶・写真・Instagram導線の公開可否を確認する。
-3. 公開承認後に、main統合とGitHub Pages移行計画を作る。
+1. 最新V3を再buildし、公開artifactの内容を検査する。
+2. build成果物だけを本番`main`直下へ配置してpushする。
+3. 公開URL、旧URL、画像、metadata、Instagram導線を実ブラウザで確認する。
 
 ## ローカルQA用URL
 
@@ -72,8 +72,8 @@
 - favicon・canonical・OG・robots・sitemap・旧URL移動を確認。
 - dist内に未確認の電話、LINE、住所、メール、生成実績画像、内部確認文言なし。
 
-## 今回の共有範囲
+## 今回の公開範囲
 
-- V3は`feature/stg-v3-experience`へcommit・pushする。
-- deploy / main変更は行っていない。
-- 公開中URLはV3に変更していない。
+- V3ソースの更新は`feature/stg-v3-experience`へcommit・pushする。
+- 本番`main`は、旧静的サイトからV3のbuild成果物だけを置くartifact-only構成へ更新する。
+- 公開URLは`https://amorworks.github.io/sawada-tomu-group-site/`を維持する。
